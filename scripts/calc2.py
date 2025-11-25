@@ -1,0 +1,64 @@
+"""
+Script de ejemplo equivalente a calc.py pero usando Typer en lugar de argparse.
+
+Este programa realiza una operación aritmética sencilla entre dos números
+proporcionados por el usuario. Las operaciones permitidas son:
+
+- "sumar"  → suma de x y y
+- "restar" → resta de x y y
+
+El usuario también puede activar un modo "verbose". Si verbose es True,
+el programa imprime solo el resultado numérico. Si verbose es False,
+imprime la operación completa.
+
+Ejemplos de uso:
+
+    uv run scripts/calc2.py 3 4
+    uv run scripts/calc2.py 10 7 --operacion restar
+    uv run scripts/calc2.py 5 6 --verbose
+"""
+
+import typer
+from typing import Literal
+
+def main(
+	x: float,
+	y: float,
+	operacion: Literal['sumar', 'restar', 'multiplicar', 'dividir'] = 'sumar',
+	verbose: bool = False,
+	precision: int = 2,
+)-> None:
+	"""
+    Realiza una operación aritmética simple entre dos números.
+
+    Parámetros:
+    - x: Primer número.
+    - y: Segundo número.
+    - operacion: "sumar" o "restar".
+    - verbose: Si es True, imprime solo el resultado; si es False,
+      imprime la operación completa.
+    """
+	if operacion == 'sumar':
+		resultado = x + y
+		operador = '+'
+	elif operacion == 'restar':
+		resultado = x - y
+		operador = '-'
+	elif operacion == 'multiplicar':
+	    resultado = x * y
+	    operador = '*'
+	elif operacion == 'dividir':
+	    resultado = x / y
+	    operador = '/'
+	else:
+		raise typer.BadParameter('La operación debe ser "sumar", "restar", "multiplicar" o "dividir".')
+	
+	resultado = round(resultado, precision)
+	
+	if verbose:
+		print(f'{x} {operador} {y} = {resultado}')
+	else:
+		print(f'{resultado}')
+
+if __name__ == '__main__':
+	typer.run(main)
